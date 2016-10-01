@@ -2,15 +2,35 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{minted}
+\usepackage{hyperref}
+
+\hypersetup{hidelinks}
 
 \graphicspath{ {images/} }
 
 \title{数据结构第一次作业}
 \date{2016-9-30}
-\author{软件51 沈俞霖 2151601013}
+\author{沈俞霖}
 
 \begin{document}
   \maketitle
+  \vspace{100mm}
+  \begin{flushright}
+  \textbf{课程} 数据结构与算法
+
+  \textbf{姓名} 沈俞霖
+
+  \textbf{专业班级} 软件51
+
+  \textbf{学号} 2151601013
+
+  \textbf{邮箱} sylxjtu@outlook.com
+
+  \textbf{提交日期} 2016-10-*
+  \end{flushright}
+  \newpage
+
+  \tableofcontents
   \newpage
 
   \section{复杂度与时间估计}
@@ -116,6 +136,7 @@
         \end{figure}
 
     \subsection{程序实现}
+    仅列出算法代码，完整代码详见\href{https://github.com/sylxjtu/datastructure-homework/tree/master/homework1/src}{Github代码仓库}
       \paragraph{插入排序}
       \inputminted{java}{src/InsertionSort.java}
       \paragraph{选择排序}
@@ -127,4 +148,105 @@
       \paragraph{归并排序}
       \inputminted{java}{src/MergeSort.java}
 
+    \subsection{程序运行结果与时间统计}
+    \paragraph{运行结果} 所有排序程序全部通过正确性测试
+    \paragraph{时间统计} 以图表形式给出，详细数据详见\href{https://github.com/sylxjtu/datastructure-homework/blob/master/homework1/data/out.txt}{Github代码仓库}
+      \subparagraph{a} 每个排序算法在满足条件 A 和条件 B 情形下的运行时间趋势变化图
+        \begin{figure}[H]
+          \includegraphics[width=\textwidth]{insertionsort}
+          \centering
+        \end{figure}
+        \begin{figure}[H]
+          \includegraphics[width=\textwidth]{selectionsort}
+          \centering
+        \end{figure}
+        \begin{figure}[H]
+          \includegraphics[width=\textwidth]{shellsort}
+          \centering
+        \end{figure}
+        \begin{figure}[H]
+          \includegraphics[width=\textwidth]{quicksort}
+          \centering
+        \end{figure}
+        \begin{figure}[H]
+          \includegraphics[width=\textwidth]{mergesort}
+          \centering
+        \end{figure}
+      \subparagraph{b} 所有排序算法在正序下、逆序下和随机序列下的运行时间的对比图
+        \begin{figure}[H]
+          \includegraphics[width=\textwidth]{seq}
+          \centering
+        \end{figure}
+        \begin{figure}[H]
+          \includegraphics[width=\textwidth]{rev}
+          \centering
+        \end{figure}
+        \begin{figure}[H]
+          \includegraphics[width=\textwidth]{random}
+          \centering
+        \end{figure}
+    \subsection{算法分析}
+      每个算法在不同数据条件下都有一些不同的性能表现，插入排序和希尔排序的性能表现在正序时明显优于其他情况，而归并排序的时间复杂度最为稳定，三种情况下所需时间基本相等。
+
+      在处理大量数据时，希尔排序、快速排序和归并排序速度明显优于插入排序和选择排序的速度，表现了复杂度低的算法在面对大量数据时的优越性。
+  \section{选取主元素}
+    \subsection{作业题目}
+      大小为 $N$ 的数组 A，其主元素是一个出现超过 $N/2$ 次的元素（从而这样的元素最多有一个）。
+
+      例如，数组 3，3，4，2，4，4，2，4，4 有一个主元素 4
+
+      数组 3，3，4，，4，4，2，4 没有主元素。
+
+      使用两种方法实现该问题的求解，并编写程序进行实现。
+
+      同时给出两种求解的算法分析。
+
+    \subsection{程序实现}
+      使用了两种求解方法，分别是排序后顺序查找的方法和用哈希表统计后再查找的方法。
+      \paragraph{代码}
+      \inputminted{java}{src/Problem4.java}
+
+    \subsection{程序运行结果与时间统计}
+      \paragraph{运行结果} 两种解法均通过测试
+      \paragraph{运行时间} 使用$10 ^ 6$个随机数据进行最坏情况运行时间测试
+        \subparagraph{解法1运行时间} $1.86 \times 10 ^ 8$ns
+        \subparagraph{解法2运行时间} $8.50 \times 10 ^ 8$ns
+
+    \subsection{算法分析}
+      \paragraph{解法1}
+        解法1理论复杂度为$O(n\log n)$（排序） + $O(n)$（遍历），即为 $O(n\log n)$。
+      \paragraph{解法2}
+        解法2理论复杂度为$3nO(1)$（2n次哈希表查找，n次哈希表修改），即为$O(n)$，由于哈希表本身的常数复杂度使得该解法求解较慢。
+  \section{选择问题}
+    \subsection{作业题目}
+      选择问题：在一组数据中选择第 k 大数据的问题。请给出你的解决方法，并给出该解决方案的时间性能分析。
+    \subsection{程序实现}
+      按照分治的策略，随机选取轴值，把元素划分成小于轴值、大于等于轴值和轴值本身三部分，分类讨论目标元素可能处在的部分，并继续查找。
+      \paragraph{代码}
+      \inputminted{java}{src/Problem5.java}
+    \subsection{程序运行结果与时间统计}
+      \paragraph{运行结果} 解法通过了测试，有正确性
+      \paragraph{运行时间} $ 10 ^ 6 $ 个数据， $ 100 $ 次查询，最终用时 $3.51 \times 10 ^ 8$ ns
+    \subsection{算法分析}
+      在平均情况下，对大小为 $n$ 的数组，程序每次运行，都以 $O(n)$ 了复杂度遍历了整个数组，并且递归调用了自身，数量级为 $n/2$ ，可以得出递归方程为
+      \begin{equation}
+        T(n) =
+        \begin{cases}
+          O(1), & \text{如果$n=1$} \\
+          T(n/2), & \text{其他情况}
+        \end{cases}
+      \end{equation}
+      根据等比数列求和公式， $T(n) = 2nO(1) = O(n)$
+
+      在最坏情况下，递归调用的数据大小为 $n-1$ ，可以得出递归方程为
+      \begin{equation}
+        T(n) =
+        \begin{cases}
+          O(1), & \text{如果$n=1$} \\
+          T(n - 1), & \text{其他情况}
+        \end{cases}
+      \end{equation}
+      根据等差数列求和公式， $T(n) = \frac{n ^ 2 + n}{2} O(1) = O(n ^ 2)$
+
+      由于轴值随机选择，因此最坏情况基本不可能发生，该算法是有时间保障的。
 \end{document}
