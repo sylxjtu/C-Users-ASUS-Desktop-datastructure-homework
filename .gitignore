@@ -1,0 +1,5 @@
+_minted*
+*.class
+*.aux
+*.log
+*.synctex.gz
