@@ -1,0 +1,211 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{minted}
+\usepackage{hyperref}
+\usepackage{fontspec}
+\usepackage{float}
+
+\hypersetup{hidelinks}
+\graphicspath{ {images/} }
+\setmonofont{Fantasque Sans Mono}
+\setCJKmonofont{Microsoft YaHei}
+
+\title{数据结构第二次作业}
+\date{\today}
+\author{沈俞霖}
+
+\begin{document}
+  \maketitle
+  \vspace{100mm}
+  \begin{flushright}
+  \textbf{课程} \makebox[7em][l]{数据结构与算法}
+
+  \textbf{姓名} \makebox[7em][l]{沈俞霖}
+
+  \textbf{专业班级} \makebox[7em][l]{软件51}
+
+  \textbf{学号} \makebox[7em][l]{2151601013}
+
+  \textbf{邮箱} \makebox[7em][l]{sylxjtu@outlook.com}
+
+  \textbf{提交日期} \makebox[7em][l]{\today}
+  \end{flushright}
+  \newpage
+
+  \tableofcontents
+  \newpage
+
+  \section{实现List}
+    \subsection{作业题目}
+      未排序的顺序数组、已排序的顺序数组、未排序的单循环链表和已排序的单循环链表
+      为了简化问题，这些数据结构都仅仅存储 int 类型，并且实现了如下抽象对象类型
+      \inputminted{java}{src/sylxjtu/ListInterface.java}
+    \subsection{程序实现}
+    包括数据结构实现和测试代码，完整代码详见
+      \href{https://github.com/sylxjtu/datastructure-homework/tree/master/homework2/src}{Github代码仓库}
+      \footnote{https://github.com/sylxjtu/datastructure-homework/tree/master/homework2/src}
+      \paragraph{无序数组}
+      \inputminted{java}{src/sylxjtu/UnsortedArray.java}
+      \paragraph{有序数组}
+      \inputminted{java}{src/sylxjtu/SortedArray.java}
+      \paragraph{无序链表}
+      \inputminted{java}{src/sylxjtu/UnsortedLinkedList.java}
+      \paragraph{有序链表}
+      \inputminted{java}{src/sylxjtu/SortedLinkedList.java}
+    \subsection{程序运行结果与时间统计}
+      \paragraph{运行结果}
+      所有程序均通过测试
+
+    \subsection{算法分析}
+      \begin{table}[h!]
+      \centering
+      \begin{tabular}{|l|l|l|l|l|}
+      \hline
+      数据结构        & \textbf{无序数组} & \textbf{有序数组} & \textbf{无序链表} & \textbf{有序链表} \\
+      \hline
+      search      & $O(n)$        & $O(\log n)$   & $O(n)$        & $O(n)$        \\
+      insert      & $O(1)$        & $O(n)$        & $O(1)$        & $O(n)$        \\
+      delete      & $O(n)$        & $O(n)$        & $O(n)$        & $O(n)$        \\
+      successor   & $O(1)$        & $O(1)$        & $O(1)$        & $O(1)$        \\
+      predecessor & $O(1)$        & $O(1)$        & $O(1)$        & $O(1)$        \\
+      minimum     & $O(n)$        & $O(1)$        & $O(n)$        & $O(1)$        \\
+      maximum     & $O(n)$        & $O(1)$        & $O(n)$        & $O(1)$        \\
+      kthElement  & $O(n)$        & $O(1)$        & $O(n)$        & $O(k)$        \\
+      \hline
+      \end{tabular}
+      \end{table}
+  \section{创建布尔表达式计算器}
+    \subsection{题目描述}
+      本题是要计算如下的布尔表达式： $(T |T)\& F \&(F|T)$
+      其中 $T$ 表示 True，$F$ 表示 False。
+      表达式可以包含如下运算符：$!$表示 not，$\&$表示 and，$|$表示 or，允许使用括号。
+
+      为了执行表达式的运算，要考虑运算符的优先级：not 的优先级最高，or 的优先级最低。
+      计算器要产生 $V$ 或 $F$，表达最终表达式计算的结果。
+
+      对输入的表达式的要求如下：
+      \begin{enumerate}
+        \item 一个表达式不超过 100 个符号，符号间可以用任意个空格分开，或者根本没有空格，所以表达式总的长度也就是字符的个数，它是未知的。
+        \item 要能处理表达式中出现括号不匹配、运算符缺少运算操作数等常见的输入错误。
+      \end{enumerate}
+    \subsection{问题分析}
+      表达式文法为
+
+      \begin{equation}
+      \begin{aligned}
+        expr & \rightarrow andexpr | expr \\
+             & \rightarrow andexpr
+      \end{aligned}
+      \end{equation}
+
+      \begin{equation}
+      \begin{aligned}
+        andexpr & \rightarrow notexpr \& expr \\
+                & \rightarrow notexpr
+      \end{aligned}
+      \end{equation}
+
+      \begin{equation}
+      \begin{aligned}
+        notexpr & \rightarrow ! notexpr \\
+                & \rightarrow atom
+      \end{aligned}
+      \end{equation}
+
+      \begin{equation}
+      \begin{aligned}
+        atom & \rightarrow T \\
+             & \rightarrow F \\
+             & \rightarrow (expr) \\
+      \end{aligned}
+      \end{equation}
+
+      规约为LL(1)文法为
+
+      \begin{equation}
+      \begin{aligned}
+      expr &\rightarrow andexpr \  rexpr
+      \end{aligned}
+      \end{equation}
+
+      \begin{equation}
+      \begin{aligned}
+      rexpr &\rightarrow | expr \\
+            &\rightarrow \epsilon
+      \end{aligned}
+      \end{equation}
+
+      \begin{equation}
+      \begin{aligned}
+      andexpr &\rightarrow notexpr \  randexpr
+      \end{aligned}
+      \end{equation}
+
+      \begin{equation}
+      \begin{aligned}
+      randexpr &\rightarrow \& andexpr \\
+               &\rightarrow \epsilon
+      \end{aligned}
+      \end{equation}
+
+      \begin{equation}
+      \begin{aligned}
+      notexpr &\rightarrow ! notexpr \\
+              &\rightarrow atom
+      \end{aligned}
+      \end{equation}
+
+      \begin{equation}
+      \begin{aligned}
+      atom &\rightarrow T \\
+           &\rightarrow F \\
+           &\rightarrow (expr)
+      \end{aligned}
+      \end{equation}
+
+      之后可以通过递归下降法求解
+
+    \subsection{程序实现}
+      \inputminted{java}{src/sylxjtu/BoolEquationEvaluate.java}
+
+    \subsection{程序运行结果与时间统计}
+      \paragraph{运行结果} 通过POJ2109测试
+      \paragraph{时间统计} POJ2109测试，10组表达式，用时279ms
+
+    \subsection{算法分析}
+      根据递归下降法，每次扫描一个符号，故复杂度为$O(N)$（$N$为符号数）
+
+  \section{队列实现基数排序}
+    \subsection{题目描述}
+      利用队列实现对某一个数据序列的排序（采用基数排序），
+      其中对数据序列的数据（第 1 和第 2 条进行说明）
+      和队列的存储方式（第 3 条进行说明）有如下的要求：
+      \begin{enumerate}
+        \item 当数据序列是整数类型的数据的时候，数据序列中每个数据的位数不要求等宽，比如： \\
+        1、21、12、322、44、123、2312、765、56
+        \item 当数据序列是字符串类型的数据的时候，数据序列中每个字符串都是等宽的，比如： \\
+        "abc","bde","fad","abd","bef","fdd","abe"
+        \item 要求重新构建队列的存储表示方法：使其能够将 n 个队列顺序映射到一个数组listArray中，每个队列都表示成内存中的一个循环队列
+      \end{enumerate}
+    \subsection{问题分析}
+      首先确定排序的顺序，对于整数排序的顺序是按数的大小升序，对于字符串排序的顺序是字典序升序
+      按照要求3，通过一个循环数组实现队列的操作
+    \subsection{程序实现}
+      \paragraph{整数队列接口}
+      \inputminted{java}{src/sylxjtu/QueueInt.java}
+      \paragraph{整数队列实现}
+      \inputminted{java}{src/sylxjtu/LoopArrayQueueInt.java}
+      \paragraph{字符串队列接口}
+      \inputminted{java}{src/sylxjtu/QueueString.java}
+      \paragraph{字符串队列实现}
+      \inputminted{java}{src/sylxjtu/LoopArrayQueueString.java}
+      \paragraph{整数基数排序}
+      \inputminted{java}{src/sylxjtu/IntegerRadixSort.java}
+      \paragraph{字符串基数排序}
+      \inputminted{java}{src/sylxjtu/StringRadixSort.java}
+    \subsection{程序运行结果}
+      \paragraph{运行结果} 通过两组样例测试
+    \subsection{算法分析}
+      \paragraph{复杂度分析} 基数排序复杂度为$O(kN)$ ，其中$k$为最大数据长度， k为数组大小
+\end{document}
